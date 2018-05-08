@@ -10,15 +10,25 @@ import Header from './components/Header'
 
 class App extends Component {
 
-  
+  constructor() {
+    super()
+    this.state = { file: '' }
+    this.handleFile = this.handleFile.bind(this);
+  }
+
+  handleFile(file) {
+    console.log(`Recibí el archivo ${file}`);
+    this.setState({
+      file: file
+    });
+  }
+
   render() {
     return (
       <div className="App">
         <Header></Header>
-        <FileManager />
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <FileManager handleFile={this.handleFile} />
+        {this.state.file ? (<pre>{this.state.file}</pre>) : (<div>No hay archivo</div>)}
       </div>
     );
   }

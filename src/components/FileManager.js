@@ -23,6 +23,7 @@ export class FileManager extends Component {
             this.setState({
               contenido:fileAsBinaryString
             })
+            this.props.handleFile(fileAsBinaryString);
         };
         reader.onabort = () => console.log('file reading was aborted');
         reader.onerror = () => console.log('file reading has failed');
@@ -41,7 +42,7 @@ export class FileManager extends Component {
               this.state.files.map(f => <li>{f.name} - {f.size} bytes - {f.getAsText()}</li>)
             }
           </ul> */}
-          <pre>{this.state.contenido}</pre>
+          {/* <pre>{this.state.contenido}</pre> */}
       </div>
     )
   }
