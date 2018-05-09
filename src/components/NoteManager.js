@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import { generate } from 'pegjs';
+import React, { Component } from 'react';
+import { CardColumns } from 'reactstrap';
+
 import gramatica from '../grammar/kindleNotes.pegjs';
-import { generate } from "pegjs";
 import Note from './Note';
-import { Card, Button, CardImg, CardTitle, CardText, CardColumns,
-    CardSubtitle, CardBody } from 'reactstrap';
 
 export default class NoteManager extends Component {
 
@@ -37,6 +37,10 @@ export default class NoteManager extends Component {
         }
     }
 
+    getKeyOfNote(note){
+        return JSON.stringify(note);
+    }
+
     
     render() {
         const { notas, isLoading } = this.state;
@@ -44,13 +48,10 @@ export default class NoteManager extends Component {
           return <p>Loading ...</p>;
         }
         return (
-            <CardColumns>
-                { notas.map(nota => <Note {...nota} />) }
+            <CardColumns  >
+                { notas.map(nota => <Note key={this.getKeyOfNote(nota)} {...nota} />) }
             </CardColumns>
         )
     }
 }
 
-// <pre>
-            //     {JSON.stringify(notas)}
-            // </pre>
