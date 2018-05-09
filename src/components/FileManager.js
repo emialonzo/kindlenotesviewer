@@ -37,12 +37,6 @@ export class FileManager extends Component {
         <Dropzone className='droop' onDrop={this.onDrop2.bind(this)}>
           <p>Try dropping some files here, or click to select files to upload.</p>
         </Dropzone>
-        {/* <ul>
-            {
-              this.state.files.map(f => <li>{f.name} - {f.size} bytes - {f.getAsText()}</li>)
-            }
-          </ul> */}
-          {/* <pre>{this.state.contenido}</pre> */}
       </div>
     )
   }
