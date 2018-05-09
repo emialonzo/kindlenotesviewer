@@ -4,6 +4,7 @@ import './App.css';
 import FileManager from './components/FileManager';
 
 import Header from './components/Header'
+import NoteManager from './components/NoteManager';
 
 
 
@@ -27,8 +28,8 @@ class App extends Component {
     return (
       <div className="App">
         <Header></Header>
-        <FileManager handleFile={this.handleFile} />
-        {this.state.file ? (<pre>{this.state.file}</pre>) : (<div>No hay archivo</div>)}
+        
+        {this.state.file ? (<NoteManager file={this.state.file} />) : (<FileManager handleFile={this.handleFile} />)}
       </div>
     );
   }
