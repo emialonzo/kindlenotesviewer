@@ -10,7 +10,7 @@ export default class NoteManager extends Component {
     constructor(props) {
         super(props);
         let parser;
-        this.parser=undefined
+        this.parser=undefined;
         this.state = {
             isLoading: true,
             notas:{}
@@ -48,7 +48,7 @@ export default class NoteManager extends Component {
           return <p>Loading ...</p>;
         }
         return (
-            <CardColumns  >
+            <CardColumns style={{padding:"40px"}} >
                 { notas.map(nota => <Note key={this.getKeyOfNote(nota)} {...nota} />) }
             </CardColumns>
         )
