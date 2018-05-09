@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import FileManager from './components/FileManager';
 
-import Header from './components/Header'
+import React, { Component } from 'react';
+
+import FileManager from './components/FileManager';
+import Header from './components/Header';
 import NoteManager from './components/NoteManager';
 
 
