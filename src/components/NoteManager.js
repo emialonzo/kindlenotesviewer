@@ -17,6 +17,7 @@ export default class NoteManager extends Component {
             authors:[],
             obras:{},
             selectedAuthor:"",
+            selectedBook:"",
         };
     }
 
@@ -34,13 +35,19 @@ export default class NoteManager extends Component {
                 let notas = this.parser(this.cambiarSeparador(this.props.file)); 
                 let obras = notas.reduce(
                     (obras,nota) => {
-                        obras[nota.obra.autor.replace(/,/g,'')] = nota.obra.titulo.replace(/,/g,'')
+                        let author = nota.obra.autor.replace(/,/g,'');
+                        let title = nota.obra.titulo.replace(/,/g,'');
+                        // obras[author]? obras[author]={title}:
+                        if(!obras[author]){obras[author]= new Set();}
+                        obras[author].add(title);
+                        console.log(`Actual ${author}:${title} :: Total ${Array.from(obras[author])}`);
                         return obras;
                     },{})
                 this.setState({ 
                     isLoading: false,
                     notas,
                     authors:Object.keys(obras),
+                    obras,
                 });
             });
             
@@ -58,16 +65,23 @@ export default class NoteManager extends Component {
             selectedAuthor:e.target.value
         })
     }
+    handleTitleChange(e){
+        // alert(`Cambio el libro a ${e.target.value}`)
+        this.setState({
+            selectedBook:e.target.value
+        })
+    }
 
     cleanAuthor(){
         this.setState({
-            selectedAuthor:""
+            selectedAuthor:"",
+            selectedBook:"",
         })
     }
 
     
     render() {
-        const { notas, isLoading, authors,selectedAuthor } = this.state;
+        const { notas, isLoading, authors,selectedAuthor, obras, selectedBook } = this.state;
         if (isLoading) {
           return <p>Loading ...</p>;
         }
@@ -76,13 +90,25 @@ export default class NoteManager extends Component {
                 <FormGroup>
                     <Label for="exampleSelect">Autores</Label>
                     <Input type="select" name="autores" id="exampleSelect" onChange={(e)=>this.handleAuthorChange(e)}>
-                        { authors.map(author=><option>{author}</option>)}
+                        <option value="">Seleccionar...</option>
+                        { authors.map(author=><option key={`key${author}`}>{author}</option>)}
                     </Input>
                 </FormGroup>
-                {selectedAuthor && <button onClick={(e)=>this.cleanAuthor()}>{selectedAuthor}</button>}
+                {selectedAuthor && (<FormGroup>
+                    <Label for="exampleSelect">Autores</Label>
+                    <Input type="select" name="libros" id="exampleSelect" onChange={(e)=>this.handleTitleChange(e)}>
+                        <option value="">Seleccionar...</option>
+                        { Array.from(obras[selectedAuthor]).map(title => <option>{title}</option>)}
+                    </Input>
+                </FormGroup>)}
+                {selectedAuthor && <button onClick={(e)=>this.cleanAuthor()}>Limpiar</button>}
                 <CardColumns style={{padding:"40px"}} >
                     { notas
-                        .filter(nota=> selectedAuthor? nota.obra.autor.replace(/,/g,'') === selectedAuthor:true)
+                        .filter(nota=> selectedAuthor? nota.obra.autor.replace(/,/g,'') === selectedAuthor : true)
+                        .filter(nota=> {
+                            // console.log(`"${nota.obra.titulo.replace(/,/g,'')}" === "${selectedBook}" : ${nota.obra.titulo.replace(/,/g,'') === selectedBook}`)
+                            return selectedBook? nota.obra.titulo.replace(/,/g,'').replace(/\s+$/, '') === selectedBook : true
+                        })
                         .map(nota => <Note key={this.getKeyOfNote(nota)} {...nota} />) }
                 </CardColumns>
             </div>
